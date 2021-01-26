@@ -10,7 +10,8 @@
         margin: 0;
     }
     .progress-ring {
-        margin: 5vw;
+        position: absolute;
+        top: 5vw;
         width: 90vw;
         height: 90vw;
     }
@@ -27,7 +28,7 @@
     .progress-ring__circle {
         transition: stroke-dashoffset 0.35s;
         transform: rotate(-90deg);
-        transform-origin: 50% 50%,
+        transform-origin: 50% 50%;
     }
 </style>
 <html>
@@ -44,8 +45,8 @@
             stroke-width="8"
             fill="transparent"
             r="40vw"
-            cx="40vw"
-            cy="40vw"/>
+            cx="-44vw"
+            cy="44vw"/>
         </svg>
     </body>
 </html>
@@ -89,6 +90,6 @@
         console.log("setProgress(percent)", percent);
         const offset = circumference - percent / 100 * circumference;
         circle.style.strokeDashoffset = offset;
-        speedometer.value = percent;
+        speedometer.innerHTML = percent;
     }
 </script>

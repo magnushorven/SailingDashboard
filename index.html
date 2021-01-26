@@ -55,19 +55,21 @@
     let connected = false,
         error;
     let speed = 0;
-    // http://www.websocket.org/echo.html
 
     var speedometer = document.querySelector("#speedometer"),
-        // wsUri = "ws://echo.websocket.org/",
         wsUri = "ws://127.0.0.1/",
         websocket = new WebSocket(wsUri);
 
+    speedometer.innerHTML = "Started";
+
     websocket.onopen = function (e) {
         connected = true;
+        speedometer.innerHTML = "connected";
     };
 
     websocket.onclose = function (e) {
         connected = false;
+        speedometer.innerHTML = "disconnected";
     };
 
     websocket.onmessage = function (e) {
@@ -77,6 +79,7 @@
 
     websocket.onerror = function (e) {
         error = e.data;
+        speedometer.innerHTML = e.data;
     };
     
     var circle = document.querySelector('circle');

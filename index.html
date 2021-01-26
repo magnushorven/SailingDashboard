@@ -1,60 +1,91 @@
 <!doctype html>
 <style>
-    textarea { vertical-align: bottom; }
-    #output { overflow: auto; }
-    #output > p { overflow-wrap: break-word; }
-    #output span { color: blue; }
-    #output span.error { color: red; }
+    html, body {
+        background-color: #3d3d3d;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        position: relative;
+        margin: 0;
+    }
+    #progress-ring {
+        margin: 5vw;
+        width: 90vw;
+        height: 90vw;
+    }
+    #speedometer {
+        position: absolute;
+        top: 40vm;
+        width: 100vw;
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        color: #fff;
+        font-size: 72;
+        font-weight: 700;
+    }
+    .progress-ring__circle {
+        transition: stroke-dashoffset 0.35s;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%,
+    }
 </style>
-<h2>WebSocket Test</h2>
-<textarea cols=60 rows=6></textarea>
-<button>send</button>
-
-<div id=output></div>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <svg class="progress-ring">
+          <circle
+            class="progress-ring__circle"
+            stroke="white"
+            stroke-width="8"
+            fill="transparent"
+            r="52"
+            cx="60"
+            cy="60"/>
+        </svg>
+    </body>
+</html>
 
 <script>
+    let connected = false,
+        error;
+    let speed = 0;
     // http://www.websocket.org/echo.html
 
-    var button = document.querySelector("button"),
-        output = document.querySelector("#output"),
-        textarea = document.querySelector("textarea"),
+    var speedometer = document.querySelector("#speedometer"),
         // wsUri = "ws://echo.websocket.org/",
         wsUri = "ws://127.0.0.1/",
         websocket = new WebSocket(wsUri);
 
-    button.addEventListener("click", onClickButton);
-
     websocket.onopen = function (e) {
-        writeToScreen("CONNECTED");
-        doSend("WebSocket rocks");
+        connected = true;
     };
 
     websocket.onclose = function (e) {
-        writeToScreen("DISCONNECTED");
+        connected = false;
     };
 
     websocket.onmessage = function (e) {
-        writeToScreen("<span>RESPONSE: " + e.data + "</span>");
+        speed = e.data;
+        setProgress(speed);
     };
 
     websocket.onerror = function (e) {
-        writeToScreen("<span class=error>ERROR:</span> " + e.data);
+        error = e.data;
     };
+    
+    var circle = document.querySelector('circle');
+    var radius = circle.r.baseVal.value;
+    var circumference = radius * 2 * Math.PI;
 
-    function doSend(message) {
-        writeToScreen("SENT: " + message);
-        websocket.send(message);
-    }
+    circle.style.strokeDasharray = `${circumference} ${circumference}`;
+    circle.style.strokeDashoffset = `${circumference}`;
 
-    function writeToScreen(message) {
-        output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
-    }
-
-    function onClickButton() {
-        var text = textarea.value;
-
-        text && doSend(text);
-        textarea.value = "";
-        textarea.focus();
+    function setProgress(percent) {
+        const offset = circumference - percent / 100 * circumference;
+        circle.style.strokeDashoffset = offset;
     }
 </script>

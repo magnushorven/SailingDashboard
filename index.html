@@ -16,12 +16,12 @@
     }
     #speedometer {
         position: absolute;
-        top: 40vm;
+        top: 40vw;
         width: 100vw;
         text-align: center;
         font-family: 'Open Sans', sans-serif;
         color: #fff;
-        font-size: 72;
+        font-size: 72px;
         font-weight: 700;
     }
     .progress-ring__circle {
@@ -86,6 +86,7 @@
     circle.style.strokeDashoffset = `${circumference}`;
 
     function setProgress(percent) {
+        console.log("setProgress(percent)", percent);
         const offset = circumference - percent / 100 * circumference;
         circle.style.strokeDashoffset = offset;
         speedometer.value = percent;

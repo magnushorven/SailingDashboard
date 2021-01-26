@@ -69,18 +69,21 @@
     speedometer.innerHTML = "Started";
 
     websocket.onopen = function (e) {
+        console.log("onopen", e);
         writeToScreen("CONNECTED");
         connected = true;
         speedometer.innerHTML = "connected";
     };
 
     websocket.onclose = function (e) {
+        console.log("onclose", e);
         writeToScreen("DISCONNECTED");
         connected = false;
         speedometer.innerHTML = "disconnected";
     };
 
     websocket.onmessage = function (e) {
+        console.log("onmessage", e);
         writeToScreen("<span>RESPONSE: " + e.data + "</span>");
         speed = e.data;
         setProgress(speed);
@@ -88,6 +91,7 @@
 
     websocket.onerror = function (e) {
         writeToScreen("<span class=error>ERROR:</span> " + e.data);
+        console.log("onerror", e);
         error = e.data;
         speedometer.innerHTML = e.data;
     };

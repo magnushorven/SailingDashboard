@@ -30,6 +30,10 @@
         transform: rotate(-90deg);
         transform-origin: 50% 50%;
     }
+    #output { overflow: auto; }
+    #output > p { overflow-wrap: break-word; }
+    #output span { color: blue; }
+    #output span.error { color: red; }
 </style>
 <html>
     <head>
@@ -48,6 +52,7 @@
             cx="44vw"
             cy="44vw"/>
         </svg>
+        <div id=output></div>
     </body>
 </html>
 
@@ -57,27 +62,32 @@
     let speed = 0;
 
     var speedometer = document.querySelector("#speedometer"),
+        output = document.querySelector("#output"),
         wsUri = "ws://127.0.0.1/",
         websocket = new WebSocket(wsUri);
 
     speedometer.innerHTML = "Started";
 
     websocket.onopen = function (e) {
+        writeToScreen("CONNECTED");
         connected = true;
         speedometer.innerHTML = "connected";
     };
 
     websocket.onclose = function (e) {
+        writeToScreen("DISCONNECTED");
         connected = false;
         speedometer.innerHTML = "disconnected";
     };
 
     websocket.onmessage = function (e) {
+        writeToScreen("<span>RESPONSE: " + e.data + "</span>");
         speed = e.data;
         setProgress(speed);
     };
 
     websocket.onerror = function (e) {
+        writeToScreen("<span class=error>ERROR:</span> " + e.data);
         error = e.data;
         speedometer.innerHTML = e.data;
     };
@@ -94,5 +104,9 @@
         const offset = circumference - percent / 100 * circumference;
         circle.style.strokeDashoffset = offset;
         speedometer.innerHTML = percent;
+    }
+    
+    function writeToScreen(message) {
+        output.insertAdjacentHTML("afterbegin", "<p>" + message + "</p>");
     }
 </script>

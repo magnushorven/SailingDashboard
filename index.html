@@ -2,13 +2,19 @@
 
 <style>
     html, body {
-        background-color: #3d3d3d;
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100%;
         position: relative;
         margin: 0;
+    }
+    body {
+        background-color: #3d3d3d;
+        transition: background 1s;
+    }
+    .done {
+        background-color: #006118 !important;
     }
     .progress-ring {
         position: absolute;
@@ -41,8 +47,8 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
         <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     </head>
-    <body>
-        <div id="speedometer">0</div>
+    <body class="done">
+        <div id="speedometer">rdy</div>
         <svg class="progress-ring">
         <circle
             class="progress-ring__circle"
@@ -61,7 +67,8 @@
 
     var speedometer = document.querySelector("#speedometer");
     
-    var circle = document.querySelector('circle');
+    var circle = document.querySelector('circle'),
+        htmlbody = document.querySelector('body');
     var radius = circle.r.baseVal.value;
     var circumference = radius * 2 * Math.PI;
 
@@ -69,13 +76,20 @@
     circle.style.strokeDashoffset = `${circumference}`;
 
     function setProgress(percent) {
-        if (!percent) {
+        if (!percent || percent === "0") {
             percent = 0;
         }
+
         console.log("setProgress(percent)", percent);
         const offset = circumference - percent / 100 * circumference;
         circle.style.strokeDashoffset = offset;
-        speedometer.innerHTML = percent;
+        if (percent === 0) {
+            speedometer.innerHTML = 'done';
+            !htmlbody.classList.contains('done') ? htmlbody.classList.add('done') : null;
+        } else {
+            speedometer.innerHTML = percent;
+            htmlbody.classList.contains('done') ? htmlbody.classList.remove('done') : null;
+        }
     }
 
     Pusher.logToConsole = true;

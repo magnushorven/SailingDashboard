@@ -77,7 +77,7 @@
     }
 
     let getSpeed = setInterval(() => {
-        fetch('http://192.168.86.130:5432/sailing').then(response => response.json()).then(result => {
+        fetch('https://192.168.86.130:44347/sailing').then(response => response.json()).then(result => {
             console.log(result);
             setProgress(result);
         });

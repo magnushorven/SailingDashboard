@@ -47,7 +47,7 @@
             stroke="white"
             stroke-width="20"
             fill="transparent"
-            r="40vw"
+            r="150"
             cx="44vw"
             cy="44vw"/>
         </svg>
@@ -77,7 +77,7 @@
     }
 
     let getSpeed = setInterval(() => {
-        fetch('https://localhost:44371/sailing').then(response => response.json()).then(result => {
+        fetch('http://192.168.86.130:5432/sailing').then(response => response.json()).then(result => {
             console.log(result);
             setProgress(result);
         });

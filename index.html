@@ -67,7 +67,7 @@
     circle.style.strokeDashoffset = `${circumference}`;
 
     function setProgress(percent) {
-        if (!percent || isNaN(percent)) {
+        if (!percent) {
             percent = 0;
         }
         console.log("setProgress(percent)", percent);
@@ -77,6 +77,9 @@
     }
 
     let getSpeed = setInterval(() => {
-        fetch('https://localhost:44371/sailing').then(response => setProgress(response));
+        fetch('https://localhost:44371/sailing').then(response => response.json()).then(result => {
+            console.log(result);
+            setProgress(result);
+        });
     }, 5000);
 </script>

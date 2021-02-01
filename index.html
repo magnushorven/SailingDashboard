@@ -32,6 +32,16 @@
         font-size: 72px;
         font-weight: 700;
     }
+    #progress {
+        position: absolute;
+        top: 100vw;
+        width: 100vw;
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        color: #fff;
+        font-size: 46px;
+        font-weight: 500;
+    }
     .progress-ring__circle {
         transition: stroke-dashoffset 0.35s;
         transform: rotate(-90deg);
@@ -59,13 +69,15 @@
             cx="44vw"
             cy="44vw"/>
         </svg>
+        <div id="progress">0/0</div>
     </body>
 </html>
 
 <script>
     let speed = 0;
 
-    var speedometer = document.querySelector("#speedometer");
+    var speedometer = document.querySelector("#speedometer"),
+        progress = document.querySelector("#progress");
     
     var circle = document.querySelector('circle'),
         htmlbody = document.querySelector('body');
@@ -75,12 +87,12 @@
     circle.style.strokeDasharray = `${circumference} ${circumference}`;
     circle.style.strokeDashoffset = `${circumference}`;
 
-    function setProgress(percent) {
+    function setSpeed(percent) {
         if (!percent || percent === "0") {
             percent = 0;
         }
 
-        console.log("setProgress(percent)", percent);
+        console.log("setSpeed(percent)", percent);
         const offset = circumference - percent / 100 * circumference;
         circle.style.strokeDashoffset = offset;
         if (percent === 0) {
@@ -92,6 +104,10 @@
         }
     }
 
+    function setProgress(current, total) {
+        progress.innerHTML = current + ' / ' + total;
+    }
+
     Pusher.logToConsole = true;
 
     var pusher = new Pusher('133f7934f1d34407323a', {
@@ -100,6 +116,7 @@
 
     var channel = pusher.subscribe('my-channel');
     channel.bind('my-event', function(data) {
-      setProgress(data.message);
+        setSpeed(data.message);
+        setProgress(data.current, data.total);
     });
 </script>

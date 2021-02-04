@@ -16,6 +16,9 @@
     .done {
         background-color: #006118 !important;
     }
+    .error {
+        background-color: #610000 !important;
+    }
     .progress-ring {
         position: absolute;
         top: 5vw;
@@ -98,6 +101,10 @@
         if (percent === 0) {
             speedometer.innerHTML = 'done';
             !htmlbody.classList.contains('done') ? htmlbody.classList.add('done') : null;
+        } else if (percent == -1) {
+            speedometer.innerHTML = 'error';
+            htmlbody.classList.contains('done') ? htmlbody.classList.remove('done') : null;
+            htmlbody.classList.add('error');
         } else {
             speedometer.innerHTML = percent;
             htmlbody.classList.contains('done') ? htmlbody.classList.remove('done') : null;

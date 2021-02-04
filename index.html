@@ -100,13 +100,15 @@
         circle.style.strokeDashoffset = offset;
         if (percent === 0) {
             speedometer.innerHTML = 'done';
+            htmlbody.classList.contains('error') ? htmlbody.classList.remove('error') : null;
             !htmlbody.classList.contains('done') ? htmlbody.classList.add('done') : null;
         } else if (percent == -1) {
             speedometer.innerHTML = 'error';
             htmlbody.classList.contains('done') ? htmlbody.classList.remove('done') : null;
-            htmlbody.classList.add('error');
+            !htmlbody.classList.contains('error') ? htmlbody.classList.add('error') : null;
         } else {
             speedometer.innerHTML = percent;
+            htmlbody.classList.contains('error') ? htmlbody.classList.remove('error') : null;
             htmlbody.classList.contains('done') ? htmlbody.classList.remove('done') : null;
         }
     }

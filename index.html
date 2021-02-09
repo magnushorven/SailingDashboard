@@ -45,10 +45,26 @@
         font-size: 46px;
         font-weight: 500;
     }
+    #uitogglebutton {
+        position: absolute;
+        bottom: 0px;
+        width: 100vw;
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        border-top: 1px solid rgb(102, 102, 102);
+        color: #fff;
+        padding: 5vw auto 5vw auto;
+        background-color: #272727;
+        font-size: 36px;
+        font-weight: 500;
+    }
     .progress-ring__circle {
         transition: stroke-dashoffset 0.35s;
         transform: rotate(-90deg);
         transform-origin: 50% 50%;
+    }
+    .hidden {
+        display: none !important;
     }
 </style>
 <html>
@@ -63,16 +79,18 @@
     <body class="done">
         <div id="speedometer">rdy</div>
         <svg class="progress-ring">
-        <circle
-            class="progress-ring__circle"
-            stroke="white"
-            stroke-width="20"
-            fill="transparent"
-            r="150"
-            cx="44vw"
-            cy="44vw"/>
+            <circle
+                class="progress-ring__circle"
+                stroke="white"
+                stroke-width="20"
+                fill="transparent"
+                r="150"
+                cx="44vw"
+                cy="44vw"
+            />
         </svg>
         <div id="progress">0/0</div>
+        <div id="uitogglebutton">ui</div>
     </body>
 </html>
 
@@ -80,8 +98,11 @@
     let speed = 0;
 
     var speedometer = document.querySelector("#speedometer"),
-        progress = document.querySelector("#progress");
-    
+        progress = document.querySelector("#progress"),
+        uitogglebtn = document.querySelector("#uitogglebutton");
+
+    uitogglebtn.onclick = () => uitoggle();
+
     var circle = document.querySelector('circle'),
         htmlbody = document.querySelector('body');
     var radius = circle.r.baseVal.value;
@@ -89,6 +110,12 @@
 
     circle.style.strokeDasharray = `${circumference} ${circumference}`;
     circle.style.strokeDashoffset = `${circumference}`;
+
+    function uitoggle() {
+        circle.classList.contains('hidden') ? circle.classList.remove('hidden') : circle.classList.add('hidden');
+        progress.classList.contains('hidden') ? progress.classList.remove('hidden') : progress.classList.add('hidden');
+        speedometer.classList.contains('hidden') ? speedometer.classList.remove('hidden') : speedometer.classList.add('hidden');
+    }
 
     function setSpeed(percent, done) {
         if (!percent || percent === "0") {

@@ -90,7 +90,7 @@
     circle.style.strokeDasharray = `${circumference} ${circumference}`;
     circle.style.strokeDashoffset = `${circumference}`;
 
-    function setSpeed(percent) {
+    function setSpeed(percent, done) {
         if (!percent || percent === "0") {
             percent = 0;
         }
@@ -99,9 +99,13 @@
         const offset = circumference - percent / 100 * circumference;
         circle.style.strokeDashoffset = offset;
         if (percent === 0) {
-            speedometer.innerHTML = 'done';
+            if (done) {
+                speedometer.innerHTML = 'pitstop';
+            } else {
+                !htmlbody.classList.contains('done') ? htmlbody.classList.add('done') : null;
+                speedometer.innerHTML = 'done';
+            }
             htmlbody.classList.contains('error') ? htmlbody.classList.remove('error') : null;
-            !htmlbody.classList.contains('done') ? htmlbody.classList.add('done') : null;
         } else if (percent == -1) {
             speedometer.innerHTML = 'error';
             htmlbody.classList.contains('done') ? htmlbody.classList.remove('done') : null;
@@ -125,7 +129,7 @@
 
     var channel = pusher.subscribe('my-channel');
     channel.bind('my-event', function(data) {
-        setSpeed(data.message);
+        setSpeed(data.message, data.current === data.total);
         setProgress(data.current, data.total);
     });
 </script>

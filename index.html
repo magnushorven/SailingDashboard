@@ -127,10 +127,10 @@
         circle.style.strokeDashoffset = offset;
         if (percent === 0) {
             if (done) {
-                speedometer.innerHTML = 'pitstop';
-            } else {
                 !htmlbody.classList.contains('done') ? htmlbody.classList.add('done') : null;
                 speedometer.innerHTML = 'done';
+            } else {
+                speedometer.innerHTML = 'pitstop';
             }
             htmlbody.classList.contains('error') ? htmlbody.classList.remove('error') : null;
         } else if (percent == -1) {
